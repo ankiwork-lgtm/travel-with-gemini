@@ -68,19 +68,54 @@ docker run -p 3000:3000 --env-file .env.local destination-discovery
 
 ## Google Cloud Run Deployment
 
-```bash
-# Build and push
-gcloud builds submit --tag gcr.io/PROJECT_ID/destination-discovery
+### Prerequisites
 
-# Deploy
-gcloud run deploy destination-discovery \
-  --image gcr.io/PROJECT_ID/destination-discovery \
-  --platform managed \
-  --region us-central1 \
-  --allow-unauthenticated \
-  --set-secrets GEMINI_API_KEY=gemini-api-key:latest \
-  --set-secrets FIREBASE_ADMIN_PRIVATE_KEY=firebase-admin-key:latest \
-  --set-env-vars NEXT_PUBLIC_FIREBASE_API_KEY=...,NEXT_PUBLIC_FIREBASE_PROJECT_ID=...
+```powershell
+gcloud auth login
+gcloud config set project YOUR_PROJECT_ID
+gcloud services enable run.googleapis.com artifactregistry.googleapis.com
+```
+
+### Step 1 — Store secrets in Secret Manager
+
+Never bake `.env.local` values into the image. Store each secret in Secret Manager:
+
+```powershell
+"your-gemini-api-key" | gcloud secrets create GEMINI_API_KEY --data-file=-
+"your-value"          | gcloud secrets create FIREBASE_ADMIN_PRIVATE_KEY --data-file=-
+# ... repeat for each variable in .env.local
+```
+
+### Step 2 — Deploy from source (Cloud Build builds & pushes the image automatically)
+
+```powershell
+$REGION = "asia-south2"
+
+gcloud run deploy travel-with-gemini `
+  --source=. `
+  --region=$REGION `
+  --platform=managed `
+  --allow-unauthenticated `
+  --port=3000 `
+  --set-secrets="GEMINI_API_KEY=GEMINI_API_KEY:latest,FIREBASE_ADMIN_PRIVATE_KEY=FIREBASE_ADMIN_PRIVATE_KEY:latest"
+```
+
+Cloud Build reads the [`Dockerfile`](Dockerfile), builds the image, pushes it to Artifact Registry, and deploys — no local Docker required.
+
+Extend `--set-secrets` with all variable names from your `.env.local`.
+
+### Step 3 — Grant Secret Manager access (if needed)
+
+```powershell
+$PROJECT_ID = $(gcloud config get-value project)
+
+$SA = $(gcloud run services describe travel-with-gemini `
+  --region=$REGION `
+  --format='value(spec.template.spec.serviceAccountName)')
+
+gcloud projects add-iam-policy-binding $PROJECT_ID `
+  --member="serviceAccount:$SA" `
+  --role="roles/secretmanager.secretAccessor"
 ```
 
 ## Acceptance Criteria
