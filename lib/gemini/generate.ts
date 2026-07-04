@@ -12,9 +12,13 @@ export interface ChatRequest {
   message?: string;
 }
 
+const promptCache = new Map<string, string>();
+
 export function loadPrompt(filename: string): string {
-  const filePath = path.join(process.cwd(), "prompts", filename);
-  return fs.readFileSync(filePath, "utf-8");
+  if (promptCache.has(filename)) return promptCache.get(filename)!;
+  const text = fs.readFileSync(path.join(process.cwd(), "prompts", filename), "utf-8");
+  promptCache.set(filename, text);
+  return text;
 }
 
 function fillTemplate(template: string, vars: Record<string, string>): string {
@@ -35,7 +39,6 @@ export function buildPrompt(req: ChatRequest, history: Message[]): string {
     history.length > 0
       ? "\n\n## Conversation History\n" +
         history
-          .slice(-10)
           .map((m) => `**${m.role === "user" ? "User" : "Assistant"}:** ${m.content}`)
           .join("\n\n")
       : "";

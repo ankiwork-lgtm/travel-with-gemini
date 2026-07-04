@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext, useContext, useEffect, useState, ReactNode } from "react";
-import { User, onAuthStateChanged, signOut } from "firebase/auth";
+import { User, onIdTokenChanged, signOut } from "firebase/auth";
 import { auth } from "@/lib/firebase/client";
 
 interface AuthContextType {
@@ -24,14 +24,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
+    // onIdTokenChanged fires on sign-in, sign-out, AND silent token refresh (~every 1 hr),
+    // ensuring idToken is always valid and never silently expires mid-session.
+    const unsubscribe = onIdTokenChanged(auth, async (firebaseUser) => {
       setUser(firebaseUser);
-      if (firebaseUser) {
-        const token = await firebaseUser.getIdToken();
-        setIdToken(token);
-      } else {
-        setIdToken(null);
-      }
+      setIdToken(firebaseUser ? await firebaseUser.getIdToken() : null);
       setLoading(false);
     });
     return () => unsubscribe();

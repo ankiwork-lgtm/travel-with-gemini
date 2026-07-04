@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { verifyIdToken } from "@/lib/auth/middleware";
-import { getHistory, saveMessage, initConversation } from "@/lib/firestore/conversation";
+import { getHistory, saveMessages, initConversation } from "@/lib/firestore/conversation";
 import { buildPrompt, callGemini, ChatRequest } from "@/lib/gemini/generate";
 
 export async function POST(request: NextRequest) {
@@ -30,16 +30,10 @@ export async function POST(request: NextRequest) {
     const responseText = await callGemini(prompt);
 
     const now = Date.now();
-    await saveMessage(uid, {
-      role: "user",
-      content: body.message || `Discover ${body.destination}`,
-      timestamp: now,
-    });
-    await saveMessage(uid, {
-      role: "assistant",
-      content: responseText,
-      timestamp: now + 1,
-    });
+    await saveMessages(uid, [
+      { role: "user", content: body.message || `Discover ${body.destination}`, timestamp: now },
+      { role: "assistant", content: responseText, timestamp: now + 1 },
+    ]);
     console.log("[Chat] Messages saved to Firestore for uid: %s", uid);
 
     return NextResponse.json({ response: responseText }, { status: 200 });
