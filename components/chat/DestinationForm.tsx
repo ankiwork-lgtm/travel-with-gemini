@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, FormEvent } from "react";
-import Input from "@/components/ui/Input";
 import Button from "@/components/ui/Button";
 
 export interface DestinationFormValues {
@@ -37,89 +36,81 @@ export default function DestinationForm({ onSubmit, isLoading }: DestinationForm
       onSubmit={handleSubmit}
       aria-label="Destination discovery form"
       style={{
-        display: "grid",
-        gridTemplateColumns: "1fr 1fr",
-        gap: "12px",
-        padding: "20px",
+        display: "flex",
+        flexWrap: "wrap",
+        alignItems: "flex-end",
+        gap: "8px",
+        padding: "10px 16px",
         backgroundColor: "#f7f8fa",
         borderBottom: "1px solid #e5e7eb",
       }}
     >
-      <Input
-        id="destination-input"
-        label="Destination"
-        type="text"
-        value={destination}
-        onChange={(e) => setDestination(e.target.value)}
-        placeholder="e.g. Paris"
-        aria-label="Destination"
-        required
-      />
-      <Input
-        id="budget-input"
-        label="Budget"
-        type="text"
-        value={budget}
-        onChange={(e) => setBudget(e.target.value)}
-        placeholder="e.g. $1500"
-        aria-label="Budget"
-        required
-      />
-      <Input
-        id="days-input"
-        label="Number of days"
-        type="number"
-        value={days}
-        onChange={(e) => setDays(e.target.value)}
-        min={1}
-        max={30}
-        aria-label="Number of days"
-        required
-      />
-      <div style={{ gridColumn: "1 / -1", display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px" }}>
-        <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
-          <label htmlFor="start-date-input" style={{ fontSize: "14px", fontWeight: 500 }}>
-            Start Date
-          </label>
-          <input
-            id="start-date-input"
-            type="date"
-            value={startDate}
-            onChange={(e) => setStartDate(e.target.value)}
-            aria-label="Start Date"
-            required
-            style={{
-              padding: "8px 12px",
-              border: "1px solid #e5e7eb",
-              borderRadius: "6px",
-              fontSize: "14px",
-              backgroundColor: "#fff",
-            }}
-          />
-        </div>
-        <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
-          <label htmlFor="end-date-input" style={{ fontSize: "14px", fontWeight: 500 }}>
-            End Date
-          </label>
-          <input
-            id="end-date-input"
-            type="date"
-            value={endDate}
-            min={startDate}
-            onChange={(e) => setEndDate(e.target.value)}
-            aria-label="End Date"
-            required
-            style={{
-              padding: "8px 12px",
-              border: "1px solid #e5e7eb",
-              borderRadius: "6px",
-              fontSize: "14px",
-              backgroundColor: "#fff",
-            }}
-          />
-        </div>
+      <div style={{ display: "flex", flexDirection: "column", gap: "2px", flex: "1 1 140px" }}>
+        <label htmlFor="destination-input" style={{ fontSize: "12px", fontWeight: 500 }}>Destination</label>
+        <input
+          id="destination-input"
+          type="text"
+          value={destination}
+          onChange={(e) => setDestination(e.target.value)}
+          placeholder="e.g. Paris"
+          aria-label="Destination"
+          required
+          style={{ padding: "6px 10px", border: "1px solid #e5e7eb", borderRadius: "6px", fontSize: "13px", backgroundColor: "#fff" }}
+        />
       </div>
-      <div style={{ gridColumn: "1 / -1" }}>
+      <div style={{ display: "flex", flexDirection: "column", gap: "2px", flex: "1 1 100px" }}>
+        <label htmlFor="budget-input" style={{ fontSize: "12px", fontWeight: 500 }}>Budget</label>
+        <input
+          id="budget-input"
+          type="text"
+          value={budget}
+          onChange={(e) => setBudget(e.target.value)}
+          placeholder="e.g. $1500"
+          aria-label="Budget"
+          required
+          style={{ padding: "6px 10px", border: "1px solid #e5e7eb", borderRadius: "6px", fontSize: "13px", backgroundColor: "#fff" }}
+        />
+      </div>
+      <div style={{ display: "flex", flexDirection: "column", gap: "2px", flex: "0 1 80px" }}>
+        <label htmlFor="days-input" style={{ fontSize: "12px", fontWeight: 500 }}>Days</label>
+        <input
+          id="days-input"
+          type="number"
+          value={days}
+          onChange={(e) => setDays(e.target.value)}
+          min={1}
+          max={30}
+          aria-label="Number of days"
+          required
+          style={{ padding: "6px 10px", border: "1px solid #e5e7eb", borderRadius: "6px", fontSize: "13px", backgroundColor: "#fff" }}
+        />
+      </div>
+      <div style={{ display: "flex", flexDirection: "column", gap: "2px", flex: "0 1 130px" }}>
+        <label htmlFor="start-date-input" style={{ fontSize: "12px", fontWeight: 500 }}>Start Date</label>
+        <input
+          id="start-date-input"
+          type="date"
+          value={startDate}
+          onChange={(e) => setStartDate(e.target.value)}
+          aria-label="Start Date"
+          required
+          style={{ padding: "6px 10px", border: "1px solid #e5e7eb", borderRadius: "6px", fontSize: "13px", backgroundColor: "#fff" }}
+        />
+      </div>
+      <div style={{ display: "flex", flexDirection: "column", gap: "2px", flex: "0 1 130px" }}>
+        <label htmlFor="end-date-input" style={{ fontSize: "12px", fontWeight: 500 }}>End Date</label>
+        <input
+          id="end-date-input"
+          type="date"
+          value={endDate}
+          min={startDate}
+          onChange={(e) => setEndDate(e.target.value)}
+          aria-label="End Date"
+          required
+          style={{ padding: "6px 10px", border: "1px solid #e5e7eb", borderRadius: "6px", fontSize: "13px", backgroundColor: "#fff" }}
+        />
+      </div>
+      <div style={{ flex: "0 0 auto" }}>
         <Button id="discover-btn" type="submit" loading={isLoading} aria-label="Discover destination">
           Discover
         </Button>
