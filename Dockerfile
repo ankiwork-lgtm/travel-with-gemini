@@ -2,6 +2,8 @@
 FROM node:20-alpine AS builder
 WORKDIR /app
 
+RUN npm install -g npm@11.6.2
+
 COPY package.json package-lock.json ./
 RUN npm ci
 
