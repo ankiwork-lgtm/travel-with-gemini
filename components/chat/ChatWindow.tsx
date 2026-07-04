@@ -18,9 +18,11 @@ export default function ChatWindow({ messages, isLoading }: ChatWindowProps) {
   }, [messages, isLoading]);
 
   return (
-    <div
+    <section
+      role="region"
       aria-live="polite"
       aria-label="Chat messages"
+      aria-busy={isLoading}
       style={{
         flex: 1,
         overflowY: "auto",
@@ -43,6 +45,6 @@ export default function ChatWindow({ messages, isLoading }: ChatWindowProps) {
         </div>
       )}
       <div ref={bottomRef} />
-    </div>
+    </section>
   );
 }

@@ -1,8 +1,8 @@
 import { initializeApp, getApps, cert, App } from "firebase-admin/app";
-import { getAuth } from "firebase-admin/auth";
-import { getFirestore } from "firebase-admin/firestore";
+import { getAuth, Auth } from "firebase-admin/auth";
+import { getFirestore, Firestore } from "firebase-admin/firestore";
 
-let adminApp: App;
+let adminApp: App | undefined;
 
 function getAdminApp(): App {
   if (getApps().length > 0) {
@@ -18,7 +18,12 @@ function getAdminApp(): App {
   return adminApp;
 }
 
-const adminAuth = getAuth(getAdminApp());
-const adminDb = getFirestore(getAdminApp());
+// Lazy getters — Firebase Admin is only initialized on the first actual request,
+// not at module import time (which would fail during `next build`).
+export function getAdminAuth(): Auth {
+  return getAuth(getAdminApp());
+}
 
-export { adminAuth, adminDb };
+export function getAdminDb(): Firestore {
+  return getFirestore(getAdminApp());
+}

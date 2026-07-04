@@ -35,6 +35,7 @@ export default function DestinationForm({ onSubmit, isLoading }: DestinationForm
   return (
     <form
       onSubmit={handleSubmit}
+      aria-label="Destination discovery form"
       style={{
         display: "grid",
         gridTemplateColumns: "1fr 1fr",
@@ -119,7 +120,7 @@ export default function DestinationForm({ onSubmit, isLoading }: DestinationForm
         </div>
       </div>
       <div style={{ gridColumn: "1 / -1" }}>
-        <Button id="discover-btn" type="submit" loading={isLoading}>
+        <Button id="discover-btn" type="submit" loading={isLoading} aria-label="Discover destination">
           Discover
         </Button>
       </div>

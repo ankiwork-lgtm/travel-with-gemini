@@ -10,6 +10,7 @@ export default function ChatBubble({ role, content }: ChatBubbleProps) {
 
   return (
     <article
+      aria-label={isUser ? "Your message" : "Assistant response"}
       style={{
         display: "flex",
         justifyContent: isUser ? "flex-end" : "flex-start",

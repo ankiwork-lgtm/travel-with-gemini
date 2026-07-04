@@ -81,9 +81,14 @@ export default function ChatPage() {
   return (
     <div style={{ display: "flex", flexDirection: "column", height: "100vh" }}>
       <Header />
-      <DestinationForm onSubmit={handleDiscover} isLoading={isLoading} />
-      <ChatWindow messages={messages} isLoading={isLoading} />
-      <ChatInput onSend={handleFollowUp} isLoading={isLoading} />
+      <main
+        id="main-content"
+        style={{ display: "flex", flexDirection: "column", flex: 1, overflow: "hidden" }}
+      >
+        <DestinationForm onSubmit={handleDiscover} isLoading={isLoading} />
+        <ChatWindow messages={messages} isLoading={isLoading} />
+        <ChatInput onSend={handleFollowUp} isLoading={isLoading} />
+      </main>
     </div>
   );
 }

@@ -24,7 +24,6 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
             border: `1px solid ${error ? "#dc2626" : "#e5e7eb"}`,
             borderRadius: "6px",
             fontSize: "14px",
-            outline: "none",
             width: "100%",
           }}
           {...props}

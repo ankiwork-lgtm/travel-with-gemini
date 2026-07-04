@@ -50,7 +50,6 @@ export default function ChatInput({ onSend, isLoading }: ChatInputProps) {
           border: "1px solid #e5e7eb",
           borderRadius: "6px",
           fontSize: "14px",
-          outline: "none",
         }}
       />
       <Button

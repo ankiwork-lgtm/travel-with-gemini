@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { adminAuth, adminDb } from "@/lib/firebase/admin";
+import { getAdminAuth, getAdminDb } from "@/lib/firebase/admin";
 import { FieldValue } from "firebase-admin/firestore";
 
 export async function POST(request: NextRequest) {
@@ -12,18 +12,18 @@ export async function POST(request: NextRequest) {
     }
 
     console.log("[Register] Creating user — email: %s", email);
-    const userRecord = await adminAuth.createUser({ email, password });
+    const userRecord = await getAdminAuth().createUser({ email, password });
     const uid = userRecord.uid;
     console.log("[Register] Firebase Auth user created — uid: %s", uid);
 
-    await adminDb.collection("users").doc(uid).set({
+    await getAdminDb().collection("users").doc(uid).set({
       uid,
       email,
       createdAt: FieldValue.serverTimestamp(),
     });
     console.log("[Register] Firestore users doc created — uid: %s", uid);
 
-    await adminDb.collection("conversation_memory").doc(uid).set({
+    await getAdminDb().collection("conversation_memory").doc(uid).set({
       uid,
       messages: [],
     });
