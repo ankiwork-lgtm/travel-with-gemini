@@ -1,0 +1,12 @@
+node_modules
+.next
+.env.local
+.env*.local
+*.log
+.git
+.gitignore
+README.md
+task.md
+technical-design-doc.md
+travel-with-gemini-spec.md
+specs
